@@ -7,12 +7,14 @@
     "latest": "1.0.0"
   },
   "readme": {
-    "description": "talosadmin Linux with mimalloc for fastest multi-threaded memory allocation",
+    "description": "Container image to manage talos k8s clusters on vSphere",
     "parent": {
       "image": "11notes/alpine:stable"
     },
     "built": {
-      "talosadmin": "https://talosadminlinux.org"
+      "talosctl": "https://github.com/siderolabs/talos",
+      "govc": "https://github.com/vmware/govmomi",
+      "kubectl": "https://github.com/kubernetes/kubernetes"
     }
   }
 }
