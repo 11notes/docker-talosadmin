@@ -1,0 +1,34 @@
+name: "talos"
+
+x-lockdown: &lockdown
+  # prevents write access to the image itself
+  read_only: true
+  # prevents any process within the container to gain more privileges
+  security_opt:
+    - "no-new-privileges=true"
+
+services:
+  admin:
+    image: "11notes/talosadmin:1.0.0"
+    <<: *lockdown
+    environment:
+      TZ: "Europe/Zurich"
+      GOVC_URL: "${GOVC_URL}"
+      GOVC_USERNAME: "${GOVC_USERNAME}"
+      GOVC_PASSWORD_FILE: "/run/secrets/password"
+    tmpfs:
+      # needed for read-only
+      - "/talosadmin:uid=1000,gid=1000"
+      - "/run/secrets:uid=1000,gid=1000"
+    secrets:
+      - "password"
+    networks:
+      frontend:
+    restart: "always"
+
+networks:
+  frontend:
+
+secrets:
+  password:
+    file: "./password.txt"

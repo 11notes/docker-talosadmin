@@ -1,0 +1,18 @@
+{
+  "image": "11notes/talosadmin",
+  "name": "talosadmin",
+  "root": "/",
+  "semver": {
+    "version": "1.0.0",
+    "latest": "1.0.0"
+  },
+  "readme": {
+    "description": "talosadmin Linux with mimalloc for fastest multi-threaded memory allocation",
+    "parent": {
+      "image": "11notes/alpine:stable"
+    },
+    "built": {
+      "talosadmin": "https://talosadminlinux.org"
+    }
+  }
+}

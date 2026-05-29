@@ -1,0 +1,7 @@
+# default
+maintain/
+node_modules/
+
+# custom
+/.env
+password.txt
