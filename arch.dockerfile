@@ -11,8 +11,12 @@
   FROM 11notes/distroless:talosctl AS distroless-talosctl
   FROM 11notes/distroless:kubectl AS distroless-kubectl
   FROM 11notes/distroless:govc AS distroless-govc
+  FROM 11notes/distroless:helm AS distroless-helm
+  FROM 11notes/distroless:git AS distroless-git
   FROM 11notes/distroless:curl AS distroless-curl
   FROM 11notes/distroless:hold AS distroless-hold
+  FROM 11notes/distroless:jq AS distroless-jq
+  FROM 11notes/distroless:yq AS distroless-yq
 
 
 # ╔═════════════════════════════════════════════════════╗
@@ -65,16 +69,29 @@
         HOME=/talosadmin
 
   # :: app specific environment
-    ENV GOVC_INSECURE="true"
+    ENV GOVC_INSECURE="true" \
+        GIT_TEMPLATE_DIR=/opt/git/templates \
+        GIT_EXEC_PATH=/opt/git
 
   # :: multi-stage
     COPY --from=distroless-talosctl / /
     COPY --from=distroless-kubectl / /
+    COPY --from=distroless-helm / /
+    COPY --from=distroless-git / /
     COPY --from=distroless-curl / /
     COPY --from=distroless-hold / /
+    COPY --from=distroless-jq / /
+    COPY --from=distroless-yq / /
     COPY --from=govc /distroless/ /
     COPY --from=file-system --chown=${APP_UID}:${APP_GID} /distroless/ /
 
+# :: INSTALL
+  USER root
+  RUN set -eux; \
+    apk --update --no-cache add \
+      nano;
+
 # :: EXECUTE
+  WORKDIR /talosadmin
   USER ${APP_UID}:${APP_GID}
   ENTRYPOINT ["/usr/local/bin/hold"]
