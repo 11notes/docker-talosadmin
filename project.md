@@ -2,8 +2,6 @@ ${{ content_synopsis }} Talos admin image with tools ready for you to use. Does 
 
 ${{ content_compose }}
 
-${{ content_build }}
-
 ${{ content_defaults }}
 
 ${{ content_environment }}
