@@ -16,15 +16,20 @@ services:
       GOVC_URL: "${GOVC_URL}"
       GOVC_USERNAME: "${GOVC_USERNAME}"
       GOVC_PASSWORD_FILE: "/run/secrets/password"
+    volumes:
+      - "talosadmin.var:/talosadmin"
     tmpfs:
       # needed for read-only
-      - "/talosadmin:uid=1000,gid=1000"
       - "/run/secrets:uid=1000,gid=1000"
+      - "/tmp:uid=1000,gid=1000"
     secrets:
       - "password"
     networks:
       frontend:
     restart: "always"
+
+volumes:
+  talosadmin.var:
 
 networks:
   frontend:
