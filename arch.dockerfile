@@ -17,6 +17,7 @@
   FROM 11notes/distroless:hold AS distroless-hold
   FROM 11notes/distroless:jq AS distroless-jq
   FROM 11notes/distroless:yq AS distroless-yq
+  FROM 11notes/distroless:kompose AS distroless-kompose
 
 
 # ╔═════════════════════════════════════════════════════╗
@@ -82,6 +83,7 @@
     COPY --from=distroless-hold / /
     COPY --from=distroless-jq / /
     COPY --from=distroless-yq / /
+    COPY --from=distroless-kompose / /
     COPY --from=govc /distroless/ /
     COPY --from=file-system --chown=${APP_UID}:${APP_GID} /distroless/ /
 
@@ -89,7 +91,8 @@
   USER root
   RUN set -eux; \
     apk --update --no-cache add \
-      nano;
+      nano \
+      coreutils;
 
 # :: EXECUTE
   WORKDIR /talosadmin
