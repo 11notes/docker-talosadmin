@@ -18,6 +18,7 @@
   FROM 11notes/distroless:jq AS distroless-jq
   FROM 11notes/distroless:yq AS distroless-yq
   FROM 11notes/distroless:kompose AS distroless-kompose
+  FROM 11notes/distroless:terraform AS distroless-terraform
 
 
 # ╔═════════════════════════════════════════════════════╗
@@ -84,6 +85,7 @@
     COPY --from=distroless-jq / /
     COPY --from=distroless-yq / /
     COPY --from=distroless-kompose / /
+    COPY --from=distroless-terraform / /
     COPY --from=govc /distroless/ /
     COPY --from=file-system --chown=${APP_UID}:${APP_GID} /distroless/ /
 
