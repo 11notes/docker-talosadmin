@@ -9,7 +9,7 @@ x-lockdown: &lockdown
 
 services:
   admin:
-    image: "11notes/talosadmin:1.0.1"
+    image: "11notes/talosadmin:1.0.2"
     <<: *lockdown
     environment:
       TZ: "Europe/Zurich"
