@@ -73,7 +73,8 @@
   # :: app specific environment
     ENV GOVC_INSECURE="true" \
         GIT_TEMPLATE_DIR=/opt/git/templates \
-        GIT_EXEC_PATH=/opt/git
+        GIT_EXEC_PATH=/opt/git \
+        TF_PLUGIN_CACHE_DIR="${APP_ROOT}/.terraform.d/init"
 
   # :: multi-stage
     COPY --from=distroless-talosctl / /
@@ -88,6 +89,7 @@
     COPY --from=distroless-terraform / /
     COPY --from=govc /distroless/ /
     COPY --from=file-system --chown=${APP_UID}:${APP_GID} /distroless/ /
+    COPY --chown=${APP_UID}:${APP_GID} ./rootfs/ /
 
 # :: INSTALL
   USER root
