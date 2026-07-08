@@ -1,0 +1,41 @@
+#!/bin/ash
+  source .env
+
+  # MetallB stage
+  echo "installing MetalLB ..."
+  terraform -chdir=./metallb init > /dev/null
+  terraform -chdir=./metallb apply --auto-approve
+
+  echo "configure MetalLB with default ingress IP pool ${TF_VAR_metallb_ingress_ip_pool} and L2 advertisement (non-BGP)"
+  terraform -chdir=./metallb-l2 init > /dev/null
+  terraform -chdir=./metallb-l2 apply --auto-approve
+
+  # Traefik stage
+  echo "installing Traefik ..."
+  terraform -chdir=./traefik init > /dev/null
+  terraform -chdir=./traefik apply --auto-approve
+
+  echo "configure Traefik with authenticated dashboard"
+  terraform -chdir=./traefik-dashboard init > /dev/null
+  terraform -chdir=./traefik-dashboard apply --auto-approve
+
+  echo "configure Traefik with defaults"
+  terraform -chdir=./traefik-defaults init > /dev/null
+  terraform -chdir=./traefik-defaults apply --auto-approve
+
+   # Cert-Manager stage
+  echo "installing Cert-Manager ..."
+  terraform -chdir=./cert-manager init > /dev/null
+  terraform -chdir=./cert-manager apply --auto-approve
+
+  echo "configure Cert-Manager issuers"
+  terraform -chdir=./cert-manager-issuer init > /dev/null
+  terraform -chdir=./cert-manager-issuer apply --auto-approve
+
+  # Headlamp stage
+  echo "installing Headlamp and configure it to run on ${TF_VAR_headlamp_fqdn}"
+  terraform -chdir=./headlamp init > /dev/null
+  terraform -chdir=./headlamp apply --auto-approve
+
+  echo "headlamp admin account JWT:"
+  kubectl create token headlamp-admin -n kube-system
