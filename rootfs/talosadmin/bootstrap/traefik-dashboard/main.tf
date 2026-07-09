@@ -3,11 +3,11 @@ terraform {
   required_providers {
     helm = {
       source  = "hashicorp/helm"
-      version = ">= 3.2.0"
+      version = "~> 3.2"
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = ">= 3.2.0"
+      version = "~> 3.2"
     }
   }
 }
@@ -75,7 +75,7 @@ resource "kubernetes_manifest" "traefik_dashboard_ingress" {
       entryPoints = ["websecure"]
       routes = [
         {
-          match = "Host(`${var.traefik_ingress_ip}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
+          match = "Host(`${trimspace(var.traefik_ingress_ip)}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
           kind  = "Rule"
           services = [
             {
