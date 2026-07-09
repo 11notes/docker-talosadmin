@@ -37,5 +37,5 @@
   terraform -chdir=./headlamp init > /dev/null
   terraform -chdir=./headlamp apply --auto-approve
 
-  echo "headlamp admin account JWT:"
-  kubectl create token headlamp-admin -n kube-system
+  echo "headlamp token for 8h:"
+  kubectl create token --duration=8h headlamp-admin -n kube-system
