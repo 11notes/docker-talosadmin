@@ -33,7 +33,7 @@ variable "traefik_ingress_ip" {
 
 resource "kubernetes_secret_v1" "dashboard_auth" {
   metadata {
-    name      = "traefik-dashboard-auth"
+    name = "traefik-dashboard-auth"
     namespace = "traefik"
   }
 
@@ -47,9 +47,9 @@ resource "kubernetes_secret_v1" "dashboard_auth" {
 resource "kubernetes_manifest" "basic_auth_middleware" {
   manifest = {
     apiVersion = "traefik.io/v1alpha1"
-    kind       = "Middleware"
+    kind = "Middleware"
     metadata = {
-      name      = "dashboard-auth"
+      name = "dashboard-auth"
       namespace = "traefik"
     }
     spec = {
@@ -63,9 +63,9 @@ resource "kubernetes_manifest" "basic_auth_middleware" {
 resource "kubernetes_manifest" "traefik_dashboard_ingress" {
   manifest = {
     apiVersion = "traefik.io/v1alpha1"
-    kind       = "IngressRoute"
+    kind = "IngressRoute"
     metadata = {
-      name      = "traefik-dashboard"
+      name = "traefik-dashboard"
       namespace = "traefik"
       annotations = {
         "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
@@ -85,7 +85,7 @@ resource "kubernetes_manifest" "traefik_dashboard_ingress" {
           ]
           middlewares = [
             {
-              name      = kubernetes_manifest.basic_auth_middleware.manifest.metadata.name
+              name = kubernetes_manifest.basic_auth_middleware.manifest.metadata.name
               namespace = "traefik"
             }
           ]

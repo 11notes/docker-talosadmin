@@ -46,7 +46,7 @@ variable "cert_manager_rfc2136_secret" {
 
 resource "kubernetes_secret_v1" "rfc2136_tsig_secret" {
   metadata {
-    name      = "rfc2136-tsig-secret"
+    name = "rfc2136-tsig-secret"
     namespace = "cert-manager"
   }
 
@@ -60,7 +60,7 @@ resource "kubernetes_secret_v1" "rfc2136_tsig_secret" {
 resource "kubernetes_manifest" "letsencrypt_issuer" {
   manifest = {
     apiVersion = "cert-manager.io/v1"
-    kind       = "ClusterIssuer"
+    kind = "ClusterIssuer"
     metadata = {
       name = "letsencrypt-prod"
     }

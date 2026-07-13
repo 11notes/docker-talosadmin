@@ -29,9 +29,9 @@ variable "metallb_ingress_ip_pool" {
 resource "kubernetes_manifest" "ip_pool" {
   manifest = {
     apiVersion = "metallb.io/v1beta1"
-    kind       = "IPAddressPool"
+    kind = "IPAddressPool"
     metadata = {
-      name      = "ingress-ip-pool"
+      name = "ingress-ip-pool"
       namespace = "metallb-system"
     }
     spec = {
@@ -45,9 +45,9 @@ resource "kubernetes_manifest" "ip_pool" {
 resource "kubernetes_manifest" "l2_advertisement" {
   manifest = {
     apiVersion = "metallb.io/v1beta1"
-    kind       = "L2Advertisement"
+    kind = "L2Advertisement"
     metadata = {
-      name      = "l2-advertisement"
+      name = "l2-advertisement"
       namespace = "metallb-system"
     }
     spec = {

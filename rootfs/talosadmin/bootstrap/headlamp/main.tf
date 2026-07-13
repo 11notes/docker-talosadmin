@@ -27,10 +27,10 @@ variable "headlamp_fqdn" {
 }
 
 resource "helm_release" "headlamp" {
-  name             = "headlamp"
-  repository       = "https://kubernetes-sigs.github.io/headlamp"
-  chart            = "headlamp"
-  namespace        = "kube-system"
+  name = "headlamp"
+  repository = "https://kubernetes-sigs.github.io/headlamp"
+  chart = "headlamp"
+  namespace = "kube-system"
   create_namespace = false
 
   set = [
@@ -43,11 +43,11 @@ resource "helm_release" "headlamp" {
 
 resource "kubernetes_ingress_v1" "headlamp_ingress" {
   metadata {
-    name      = "headlamp-ingress"
+    name = "headlamp-ingress"
     namespace = "kube-system"
     annotations = {
       "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-      "traefik.ingress.kubernetes.io/router.middlewares"= "traefik-default-http-to-https@kubernetescrd"
+      "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-default-http-to-https@kubernetescrd"
     }
   }
 
@@ -55,7 +55,7 @@ resource "kubernetes_ingress_v1" "headlamp_ingress" {
     ingress_class_name = "traefik"
 
     tls {
-      hosts       = ["${trimspace(var.headlamp_fqdn)}"]
+      hosts = ["${trimspace(var.headlamp_fqdn)}"]
       secret_name = trimspace(var.headlamp_fqdn)
     }
 
@@ -64,7 +64,7 @@ resource "kubernetes_ingress_v1" "headlamp_ingress" {
 
       http {
         path {
-          path      = "/"
+          path = "/"
           path_type = "Prefix"
 
           backend {
@@ -85,7 +85,7 @@ resource "kubernetes_ingress_v1" "headlamp_ingress" {
 
 resource "kubernetes_service_account_v1" "headlamp_admin" {
   metadata {
-    name      = "headlamp-admin"
+    name = "headlamp-admin"
     namespace = "kube-system"
   }
 }
@@ -97,13 +97,13 @@ resource "kubernetes_cluster_role_binding_v1" "headlamp_admin_binding" {
 
   role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "cluster-admin"
+    kind = "ClusterRole"
+    name = "cluster-admin"
   }
 
   subject {
-    kind      = "ServiceAccount"
-    name      = kubernetes_service_account_v1.headlamp_admin.metadata[0].name
+    kind = "ServiceAccount"
+    name = kubernetes_service_account_v1.headlamp_admin.metadata[0].name
     namespace = kubernetes_service_account_v1.headlamp_admin.metadata[0].namespace
   }
 }

@@ -32,14 +32,14 @@ resource "kubernetes_namespace_v1" "metallb" {
 }
 
 resource "helm_release" "metallb" {
-  name       = "metallb"
+  name = "metallb"
   repository = "https://metallb.github.io/metallb"
-  chart      = "metallb"
+  chart = "metallb"
   namespace  = kubernetes_namespace_v1.metallb.metadata[0].name
 
-  wait          = true
+  wait = true
   wait_for_jobs = true
-  timeout       = 120
+  timeout = 120
 
   values = [
     yamlencode({

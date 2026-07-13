@@ -48,20 +48,20 @@ variable "vsphere_vsan_policy" {
 }
 
 resource "helm_release" "vsphere_cpi" {
-  name             = "vsphere-cpi"
-  repository       = "https://kubernetes.github.io/cloud-provider-vsphere"
-  chart            = "vsphere-cpi"
-  namespace        = "kube-system"
+  name = "vsphere-cpi"
+  repository = "https://kubernetes.github.io/cloud-provider-vsphere"
+  chart = "vsphere-cpi"
+  namespace = "kube-system"
   create_namespace = false
 
   values = [
     yamlencode({
       config = {
-        enabled       = true
-        vcenter       = trimspace(var.vsphere_vcenter_fqdn)
-        username      = trimspace(var.vsphere_vcenter_user)
-        password      = trimspace(var.vsphere_vcenter_password)
-        datacenter    = trimspace(var.vsphere_datacenter)
+        enabled = true
+        vcenter = trimspace(var.vsphere_vcenter_fqdn)
+        username = trimspace(var.vsphere_vcenter_user)
+        password = trimspace(var.vsphere_vcenter_password)
+        datacenter = trimspace(var.vsphere_datacenter)
         insecureFlag  = true
       }
     })
@@ -70,7 +70,7 @@ resource "helm_release" "vsphere_cpi" {
 
 resource "kubernetes_labels" "kube_system_security" {
   api_version = "v1"
-  kind        = "Namespace"
+  kind = "Namespace"
   metadata {
     name = "kube-system"
   }
@@ -86,20 +86,20 @@ resource "kubernetes_cluster_role_binding_v1" "vsphere_csi_rbac" {
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "cluster-admin"
+    kind = "ClusterRole"
+    name = "cluster-admin"
   }
   subject {
-    kind      = "ServiceAccount"
-    name      = "vsphere-csi-controller"
+    kind = "ServiceAccount"
+    name = "vsphere-csi-controller"
     namespace = "kube-system"
   }
 }
 
 resource "helm_release" "vsphere_csi" {
-  name       = "vsphere-csi"
+  name = "vsphere-csi"
   repository = "https://vsphere-tmm.github.io/helm-charts"
-  chart      = "vsphere-csi"
+  chart = "vsphere-csi"
   namespace  = "kube-system"
   depends_on = [
     helm_release.vsphere_cpi,
@@ -112,13 +112,13 @@ resource "helm_release" "vsphere_csi" {
       config = {
         global = {
           insecure-flag = true
-          cluster-id   = trimspace(var.vsphere_cluster_id)
+          cluster-id = trimspace(var.vsphere_cluster_id)
         }
         vcenter = {
           "${replace(replace(trimspace(var.vsphere_vcenter_fqdn), "https://", ""), "/", "")}" = {
-            server      = replace(replace(trimspace(var.vsphere_vcenter_fqdn), "https://", ""), "/", "")
-            user        = trimspace(var.vsphere_vcenter_user)
-            password    = trimspace(var.vsphere_vcenter_password)
+            server = replace(replace(trimspace(var.vsphere_vcenter_fqdn), "https://", ""), "/", "")
+            user = trimspace(var.vsphere_vcenter_user)
+            password = trimspace(var.vsphere_vcenter_password)
             datacenters = [trimspace(var.vsphere_datacenter)]
           }
         }
@@ -136,9 +136,9 @@ resource "kubernetes_storage_class_v1" "vsphere_default" {
     }
   }
 
-  storage_provisioner    = "csi.vsphere.vmware.com"
-  reclaim_policy         = "Delete"
-  volume_binding_mode    = "WaitForFirstConsumer"
+  storage_provisioner = "csi.vsphere.vmware.com"
+  reclaim_policy = "Delete"
+  volume_binding_mode = "WaitForFirstConsumer"
   allow_volume_expansion = true
 
   parameters = {

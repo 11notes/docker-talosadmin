@@ -36,9 +36,9 @@ resource "kubernetes_namespace_v1" "traefik" {
 }
 
 resource "helm_release" "traefik" {
-  name       = "traefik"
+  name = "traefik"
   repository = "https://traefik.github.io/charts"
-  chart      = "traefik"
+  chart = "traefik"
   namespace  = "traefik"
 
   set = [
