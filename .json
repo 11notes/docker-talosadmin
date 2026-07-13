@@ -3,8 +3,8 @@
   "name": "talosadmin",
   "root": "/talosadmin",
   "semver": {
-    "version": "1.0.2",
-    "latest": "1.0.2"
+    "version": "1.0.3",
+    "latest": "1.0.3"
   },
   "readme": {
     "description": "Container image to manage talos k8s clusters on vSphere",
