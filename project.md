@@ -1,4 +1,4 @@
-${{ content_synopsis }} Talos admin image with tools ready for you to use. Does replace govc with custom version that can ingest the secrets file.
+${{ content_synopsis }} Talos admin image with tools ready for you to use. Does replace govc with custom version that can ingest the secrets file. Can easily bootstrap a Talos based k8s cluster with Cilium, MetalLB, Traefik, Cert-Manager and headlamp.
 
 ${{ content_compose }}
 

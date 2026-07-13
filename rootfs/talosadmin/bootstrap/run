@@ -1,6 +1,13 @@
 #!/bin/ash
   source .env
 
+  # Cillium stage
+  echo "installing Cilium with hubble ..."
+  terraform -chdir=./cilium init > /dev/null
+  terraform -chdir=./cilium apply --auto-approve
+
+  sleep 120
+
   # MetallB stage
   echo "installing MetalLB ..."
   terraform -chdir=./metallb init > /dev/null
@@ -23,6 +30,10 @@
   terraform -chdir=./traefik-defaults init > /dev/null
   terraform -chdir=./traefik-defaults apply --auto-approve
 
+  echo "configure Hubble"
+  terraform -chdir=./hubble init > /dev/null
+  terraform -chdir=./hubble apply --auto-approve
+
    # Cert-Manager stage
   echo "installing Cert-Manager ..."
   terraform -chdir=./cert-manager init > /dev/null
@@ -39,3 +50,15 @@
 
   echo "headlamp token for 8h:"
   kubectl create token --duration=8h headlamp-admin -n kube-system
+
+  # vSphere CSI stage
+  echo "installing vSphere CSI driver"
+  terraform -chdir=./vsphere-csi-vsan init > /dev/null
+  terraform -chdir=./vsphere-csi-vsan apply --auto-approve
+
+  sleep 240
+
+  # Monitoring stage
+  echo "installing monitoring for all common services"
+  terraform -chdir=./monitoring init > /dev/null
+  terraform -chdir=./monitoring apply --auto-approve

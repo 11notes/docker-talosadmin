@@ -43,6 +43,10 @@ variable "vsphere_datacenter" {
   type = string
 }
 
+variable "vsphere_default_pvc_name" {
+  type = string
+}
+
 variable "vsphere_vsan_policy" {
   type = string
 }
@@ -130,7 +134,7 @@ resource "helm_release" "vsphere_csi" {
 
 resource "kubernetes_storage_class_v1" "vsphere_default" {
   metadata {
-    name = "vsphere-default"
+    name = var.vsphere_default_pvc_name
     annotations = {
       "storageclass.kubernetes.io/is-default-class" = "true"
     }
