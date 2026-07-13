@@ -21,7 +21,7 @@ x-lockdown: &lockdown
 
 services:
   admin:
-    image: "11notes/talosadmin:1.0.2"
+    image: "11notes/talosadmin:1.0.3"
     <<: *lockdown
     environment:
       TZ: "Europe/Zurich"
@@ -69,18 +69,18 @@ To find out how you can change the default UID/GID of this container image, cons
 # MAIN TAGS 🏷️
 These are the main tags for the image. There is also a tag for each commit and its shorthand sha256 value.
 
-* [1.0.2](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.2)
+* [1.0.3](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.3)
 * [latest](https://hub.docker.com/r/11notes/talosadmin/tags?name=latest)
-* [1.0.2-unraid](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.2-unraid)
+* [1.0.3-unraid](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.3-unraid)
 * [latest-unraid](https://hub.docker.com/r/11notes/talosadmin/tags?name=latest-unraid)
-* [1.0.2-nobody](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.2-nobody)
+* [1.0.3-nobody](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.3-nobody)
 * [latest-nobody](https://hub.docker.com/r/11notes/talosadmin/tags?name=latest-nobody)
 
 # REGISTRIES ☁️
 ```
-docker pull 11notes/talosadmin:1.0.2
-docker pull ghcr.io/11notes/talosadmin:1.0.2
-docker pull quay.io/11notes/talosadmin:1.0.2
+docker pull 11notes/talosadmin:1.0.3
+docker pull ghcr.io/11notes/talosadmin:1.0.3
+docker pull quay.io/11notes/talosadmin:1.0.3
 ```
 
 # UNRAID VERSION 🟠
@@ -109,4 +109,4 @@ This image supports nobody by default. Simply add **-nobody** to any tag and the
 # ElevenNotes™️
 This image is provided to you at your own risk. Always make backups before updating an image to a different version. Check the [releases](https://github.com/11notes/docker-talosadmin/releases) for breaking changes. If you have any problems with using this image simply raise an [issue](https://github.com/11notes/docker-talosadmin/issues), thanks. If you have a question or inputs please create a new [discussion](https://github.com/11notes/docker-talosadmin/discussions) instead of an issue. You can find all my other repositories on [github](https://github.com/11notes?tab=repositories).
 
-*created 09.07.2026, 10:52:52 (CET)*
+*created 13.07.2026, 14:16:19 (CET)*
