@@ -51,6 +51,11 @@ resource "helm_release" "metallb" {
       frrk8s = {
         enabled = false
       }
+      prometheus = {
+        serviceMonitor = {
+          enabled = true
+        }
+      }
     })
   ]
 }

@@ -79,4 +79,16 @@ resource "helm_release" "traefik" {
       value = "traefik/traefik"
     }
   ]
+
+  values = [
+    yamlencode({
+      metrics = {
+        prometheus = {
+          serviceMonitor = {
+            enabled = true
+          }
+        }
+      }
+    })
+  ]
 }
