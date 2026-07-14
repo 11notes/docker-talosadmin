@@ -55,6 +55,8 @@ resource "helm_release" "metallb" {
         serviceMonitor = {
           enabled = true
         }
+        serviceAccount = "kube-prometheus-stack-prometheus"
+        namespace = "monitoring"
       }
     })
   ]

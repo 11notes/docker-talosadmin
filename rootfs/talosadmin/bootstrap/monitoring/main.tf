@@ -23,45 +23,48 @@ provider "helm" {
 }
 
 variable "grafana_admin_password" {
-  type        = string
-  sensitive   = true
+  type = string
+  sensitive = true
 }
 
 variable "monitoring_storage_class_name" {
-  type        = string
+  type = string
 }
 
 variable "prometheus_retention" {
-  type        = string
-  default     = "30d"
+  type = string
+  default = "30d"
 }
 
 variable "prometheus_storage_size" {
-  type    = string
+  type = string
   default = "256Gi"
 }
 
 variable "alertmanager_storage_size" {
-  type    = string
+  type = string
   default = "16Gi"
 }
 
 variable "grafana_storage_size" {
-  type    = string
+  type = string
   default = "32Gi"
 }
 
 resource "kubernetes_namespace_v1" "monitoring" {
   metadata {
     name = "monitoring"
+    labels = {
+      "pod-security.kubernetes.io/enforce" = "privileged"
+    }
   }
 }
 
 resource "helm_release" "kube_prometheus_stack" {
-  name             = "kube-prometheus-stack"
-  repository       = "https://prometheus-community.github.io/helm-charts"
-  chart            = "kube-prometheus-stack"
-  namespace        = "monitoring"
+  name = "kube-prometheus-stack"
+  repository = "https://prometheus-community.github.io/helm-charts"
+  chart = "kube-prometheus-stack"
+  namespace = "monitoring"
   create_namespace = false
 
   values = [
@@ -73,7 +76,7 @@ resource "helm_release" "kube_prometheus_stack" {
             volumeClaimTemplate = {
               spec = {
                 storageClassName = var.monitoring_storage_class_name
-                accessModes      = ["ReadWriteOnce"]
+                accessModes = ["ReadWriteOnce"]
                 resources = {
                   requests = {
                     storage = var.prometheus_storage_size
@@ -83,15 +86,15 @@ resource "helm_release" "kube_prometheus_stack" {
             }
           }
           serviceMonitorSelectorNilUsesHelmValues = false
-          podMonitorSelectorNilUsesHelmValues     = false
-          ruleSelectorNilUsesHelmValues           = false
+          podMonitorSelectorNilUsesHelmValues = false
+          ruleSelectorNilUsesHelmValues = false
         }
       }
 
       kubeEtcd = {
         service = {
-          enabled    = true
-          port       = 2381
+          enabled = true
+          port = 2381
           targetPort = 2381
         }
         serviceMonitor = {
@@ -119,18 +122,23 @@ resource "helm_release" "kube_prometheus_stack" {
       grafana = {
         enabled = true
         persistence = {
-          enabled          = true
+          enabled = true
           storageClassName = var.monitoring_storage_class_name
-          size             = var.grafana_storage_size
+          size = var.grafana_storage_size
         }
         adminPassword = var.grafana_admin_password
       }
 
       "prometheus-node-exporter" = {
+        service = {
+          port = 9110
+          targetPort = 9110
+        }
+        affinity = {}
         tolerations = [
           {
             operator = "Exists"
-            effect   = "NoSchedule"
+            effect = "NoSchedule"
           }
         ]
       }
