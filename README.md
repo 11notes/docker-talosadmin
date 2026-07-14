@@ -6,7 +6,7 @@
 Container image to manage talos k8s clusters on vSphere
 
 # SYNOPSIS 📖
-**What can I do with this?** Talos admin image with tools ready for you to use. Does replace govc with custom version that can ingest the secrets file.
+**What can I do with this?** Talos admin image with tools ready for you to use. Does replace govc with custom version that can ingest the secrets file. Can easily bootstrap a Talos based k8s cluster with Cilium, MetalLB, Traefik, Cert-Manager and headlamp.
 
 # COMPOSE ✂️
 ```yaml
@@ -109,4 +109,4 @@ This image supports nobody by default. Simply add **-nobody** to any tag and the
 # ElevenNotes™️
 This image is provided to you at your own risk. Always make backups before updating an image to a different version. Check the [releases](https://github.com/11notes/docker-talosadmin/releases) for breaking changes. If you have any problems with using this image simply raise an [issue](https://github.com/11notes/docker-talosadmin/issues), thanks. If you have a question or inputs please create a new [discussion](https://github.com/11notes/docker-talosadmin/discussions) instead of an issue. You can find all my other repositories on [github](https://github.com/11notes?tab=repositories).
 
-*created 13.07.2026, 14:16:19 (CET)*
+*created 14.07.2026, 01:13:50 (CET)*
