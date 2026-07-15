@@ -54,10 +54,15 @@
   echo "headlamp token for 8h:"
   kubectl create token --duration=8h headlamp-admin -n kube-system
 
-  # vSphere CSI stage
+  # vSphere CSI driver
   echo "installing vSphere CSI driver"
   terraform -chdir=./vsphere-csi-vsan init > /dev/null
   terraform -chdir=./vsphere-csi-vsan apply --auto-approve
+
+  # SMB CSI driver
+  echo "installing SMB CSI driver"
+  terraform -chdir=./smb-csi init > /dev/null
+  terraform -chdir=./smb-csi apply --auto-approve
 
   sleep 240
 
