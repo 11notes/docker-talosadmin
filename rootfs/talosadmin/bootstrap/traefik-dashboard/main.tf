@@ -27,7 +27,7 @@ variable "traefik_dashboard_admin_password" {
   sensitive = true
 }
 
-variable "traefik_ingress_ip" {
+variable "traefik_fqdn" {
   type = string
 }
 
@@ -75,7 +75,7 @@ resource "kubernetes_manifest" "traefik_dashboard_ingress" {
       entryPoints = ["websecure"]
       routes = [
         {
-          match = "Host(`${trimspace(var.traefik_ingress_ip)}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
+          match = "Host(`${trimspace(var.traefik_fqdn)}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
           kind  = "Rule"
           services = [
             {
