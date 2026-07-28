@@ -26,6 +26,10 @@ variable "monitoring_fqdn" {
   type = string
 }
 
+variable "wildcard_fqdn" {
+  type = string
+}
+
 resource "kubernetes_ingress_v1" "monitoring_ingress" {
   metadata {
     name = "monitoring-ingress"
@@ -40,8 +44,7 @@ resource "kubernetes_ingress_v1" "monitoring_ingress" {
     ingress_class_name = "traefik"
 
     tls {
-      hosts = ["${trimspace(var.monitoring_fqdn)}"]
-      secret_name = trimspace(var.monitoring_fqdn)
+      secret_name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
     }
 
     rule {

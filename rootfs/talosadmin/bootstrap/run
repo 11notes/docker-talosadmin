@@ -9,7 +9,7 @@
   terraform -chdir=./cilium init > /dev/null
   terraform -chdir=./cilium apply --auto-approve
 
-  sleep 120
+  sleep 30
 
   # MetallB stage
   echo "installing MetalLB ..."
@@ -19,6 +19,19 @@
   echo "configure MetalLB with default ingress IP pool ${TF_VAR_metallb_ingress_ip_pool} and L2 advertisement (non-BGP)"
   terraform -chdir=./metallb-l2 init > /dev/null
   terraform -chdir=./metallb-l2 apply --auto-approve
+
+  # Cert-Manager stage
+  echo "installing Cert-Manager ..."
+  terraform -chdir=./cert-manager init > /dev/null
+  terraform -chdir=./cert-manager apply --auto-approve
+
+  echo "configure Cert-Manager issuers"
+  terraform -chdir=./cert-manager-issuer init > /dev/null
+  terraform -chdir=./cert-manager-issuer apply --auto-approve
+
+  echo "configure Cert-Manager wildcard certificate"
+  terraform -chdir=./cert-manager-wildcard init > /dev/null
+  terraform -chdir=./cert-manager-wildcard apply --auto-approve
 
   # Traefik stage
   echo "installing Traefik ..."
@@ -37,22 +50,10 @@
   terraform -chdir=./hubble init > /dev/null
   terraform -chdir=./hubble apply --auto-approve
 
-   # Cert-Manager stage
-  echo "installing Cert-Manager ..."
-  terraform -chdir=./cert-manager init > /dev/null
-  terraform -chdir=./cert-manager apply --auto-approve
-
-  echo "configure Cert-Manager issuers"
-  terraform -chdir=./cert-manager-issuer init > /dev/null
-  terraform -chdir=./cert-manager-issuer apply --auto-approve
-
   # Headlamp stage
   echo "installing Headlamp and configure it to run on ${TF_VAR_headlamp_fqdn}"
   terraform -chdir=./headlamp init > /dev/null
   terraform -chdir=./headlamp apply --auto-approve
-
-  echo "headlamp token for 8h:"
-  kubectl create token --duration=8h headlamp-admin -n kube-system
 
   # vSphere CSI driver
   echo "installing vSphere CSI driver"
@@ -64,7 +65,7 @@
   terraform -chdir=./smb-csi init > /dev/null
   terraform -chdir=./smb-csi apply --auto-approve
 
-  sleep 240
+  sleep 60
 
   # Monitoring stage
   echo "installing monitoring for all common services"
@@ -74,3 +75,6 @@
   echo "configure monitoring ingress"
   terraform -chdir=./monitoring-ingress init > /dev/null
   terraform -chdir=./monitoring-ingress apply --auto-approve
+
+  echo "headlamp token for 8h:"
+  kubectl create token --duration=8h headlamp-admin -n kube-system

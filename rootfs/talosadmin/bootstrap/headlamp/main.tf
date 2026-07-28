@@ -26,6 +26,10 @@ variable "headlamp_fqdn" {
   type = string
 }
 
+variable "wildcard_fqdn" {
+  type = string
+}
+
 resource "helm_release" "headlamp" {
   name = "headlamp"
   repository = "https://kubernetes-sigs.github.io/headlamp"
@@ -55,8 +59,7 @@ resource "kubernetes_ingress_v1" "headlamp_ingress" {
     ingress_class_name = "traefik"
 
     tls {
-      hosts = ["${trimspace(var.headlamp_fqdn)}"]
-      secret_name = trimspace(var.headlamp_fqdn)
+      secret_name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
     }
 
     rule {

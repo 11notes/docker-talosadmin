@@ -31,6 +31,11 @@ variable "hubble_dashboard_admin_password" {
   sensitive = true
 }
 
+variable "wildcard_fqdn" {
+  type = string
+}
+
+
 resource "kubernetes_secret_v1" "dashboard_auth" {
   metadata {
     name = "hubble-dashboard-auth"
@@ -74,8 +79,7 @@ resource "kubernetes_ingress_v1" "hubble_ingress" {
     ingress_class_name = "traefik"
 
     tls {
-      hosts = ["${trimspace(var.hubble_fqdn)}"]
-      secret_name = trimspace(var.hubble_fqdn)
+      secret_name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
     }
 
     rule {

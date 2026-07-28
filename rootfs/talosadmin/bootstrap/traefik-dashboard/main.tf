@@ -31,6 +31,10 @@ variable "traefik_fqdn" {
   type = string
 }
 
+variable "wildcard_fqdn" {
+  type = string
+}
+
 resource "kubernetes_secret_v1" "dashboard_auth" {
   metadata {
     name = "traefik-dashboard-auth"
@@ -69,10 +73,13 @@ resource "kubernetes_manifest" "traefik_dashboard_ingress" {
       namespace = "traefik"
       annotations = {
         "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+        "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-default-http-to-https@kubernetescrd,traefik-dashboard-auth@kubernetescrd"
       }
     }
     spec = {
-      entryPoints = ["websecure"]
+      tls = {
+        secretName = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
+      }
       routes = [
         {
           match = "Host(`${trimspace(var.traefik_fqdn)}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
@@ -81,12 +88,6 @@ resource "kubernetes_manifest" "traefik_dashboard_ingress" {
             {
               name = "api@internal"
               kind = "TraefikService"
-            }
-          ]
-          middlewares = [
-            {
-              name = kubernetes_manifest.basic_auth_middleware.manifest.metadata.name
-              namespace = "traefik"
             }
           ]
         }
