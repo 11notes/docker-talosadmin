@@ -76,5 +76,5 @@
   terraform -chdir=./monitoring-ingress init > /dev/null
   terraform -chdir=./monitoring-ingress apply --auto-approve
 
-  echo "headlamp token for 8h:"
-  kubectl create token --duration=8h headlamp-admin -n kube-system
+  echo "headlamp token for 24h:"
+  kubectl create token --duration=24h headlamp-admin -n kube-system
