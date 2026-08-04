@@ -2,11 +2,11 @@ terraform {
   required_version = ">= 1.15.0"
   required_providers {
     helm = {
-      source  = "hashicorp/helm"
+      source = "hashicorp/helm"
       version = "~> 3.2"
     }
     kubernetes = {
-      source  = "hashicorp/kubernetes"
+      source = "hashicorp/kubernetes"
       version = "~> 3.2"
     }
   }
@@ -39,43 +39,43 @@ resource "helm_release" "traefik" {
   name = "traefik"
   repository = "https://traefik.github.io/charts"
   chart = "traefik"
-  namespace  = "traefik"
+  namespace = "traefik"
 
   set = [
     {
-      name  = "deployment.kind"
+      name = "deployment.kind"
       value = "DaemonSet"
     },
     {
-      name  = "hostNetwork"
+      name = "hostNetwork"
       value = "true"
     },
     {
-      name  = "updateStrategy.rollingUpdate.maxUnavailable"
+      name = "updateStrategy.rollingUpdate.maxUnavailable"
       value = "1"
     },
     {
-      name  = "updateStrategy.rollingUpdate.maxSurge"
+      name = "updateStrategy.rollingUpdate.maxSurge"
       value = "0"
     },
     {
-      name  = "deployment.dnsPolicy" 
+      name = "deployment.dnsPolicy" 
       value = "ClusterFirstWithHostNet"
     },
     {
-      name  = "service.spec.externalTrafficPolicy"
+      name = "service.spec.externalTrafficPolicy"
       value = "Local"
     },
     {
-      name  = "service.spec.loadBalancerIP"
+      name = "service.spec.loadBalancerIP"
       value = trimspace(var.traefik_ingress_ip)
     },
     {
-      name  = "ingressRoute.dashboard.enabled"
+      name = "ingressRoute.dashboard.enabled"
       value = "false"
     },
     {
-      name  = "providers.kubernetesIngress.publishedService.pathOverride"
+      name = "providers.kubernetesIngress.publishedService.pathOverride"
       value = "traefik/traefik"
     }
   ]

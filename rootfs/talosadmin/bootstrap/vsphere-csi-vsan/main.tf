@@ -2,11 +2,11 @@ terraform {
   required_version = ">= 1.15.0"
   required_providers {
     helm = {
-      source  = "hashicorp/helm"
+      source = "hashicorp/helm"
       version = "~> 3.2"
     }
     kubernetes = {
-      source  = "hashicorp/kubernetes"
+      source = "hashicorp/kubernetes"
       version = "~> 3.2"
     }
   }
@@ -66,7 +66,7 @@ resource "helm_release" "vsphere_cpi" {
         username = trimspace(var.vsphere_vcenter_user)
         password = trimspace(var.vsphere_vcenter_password)
         datacenter = trimspace(var.vsphere_datacenter)
-        insecureFlag  = true
+        insecureFlag = true
       }
     })
   ]
@@ -104,7 +104,7 @@ resource "helm_release" "vsphere_csi" {
   name = "vsphere-csi"
   repository = "https://vsphere-tmm.github.io/helm-charts"
   chart = "vsphere-csi"
-  namespace  = "kube-system"
+  namespace = "kube-system"
   depends_on = [
     helm_release.vsphere_cpi,
     kubernetes_cluster_role_binding_v1.vsphere_csi_rbac,

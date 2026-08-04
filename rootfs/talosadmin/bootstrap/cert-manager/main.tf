@@ -2,11 +2,11 @@ terraform {
   required_version = ">= 1.15.0"
   required_providers {
     helm = {
-      source  = "hashicorp/helm"
+      source = "hashicorp/helm"
       version = "~> 3.2"
     }
     kubernetes = {
-      source  = "hashicorp/kubernetes"
+      source = "hashicorp/kubernetes"
       version = "~> 3.2"
     }
   }
@@ -32,11 +32,11 @@ resource "helm_release" "cert_manager" {
   name = "cert-manager"
   repository = "https://charts.jetstack.io"
   chart = "cert-manager"
-  namespace  = "cert-manager"
+  namespace = "cert-manager"
 
   set = [
     {
-      name  = "installCRDs"
+      name = "installCRDs"
       value = "true"
     }
   ]

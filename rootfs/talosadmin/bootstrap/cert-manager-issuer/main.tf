@@ -2,11 +2,11 @@ terraform {
   required_version = ">= 1.15.0"
   required_providers {
     helm = {
-      source  = "hashicorp/helm"
+      source = "hashicorp/helm"
       version = "~> 3.2"
     }
     kubernetes = {
-      source  = "hashicorp/kubernetes"
+      source = "hashicorp/kubernetes"
       version = "~> 3.2"
     }
   }
@@ -66,7 +66,7 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
     }
     spec = {
       acme = {
-        email  = trimspace(var.cert_manager_email_address)
+        email = trimspace(var.cert_manager_email_address)
         server = "https://acme-v02.api.letsencrypt.org/directory"
         privateKeySecretRef = {
           name = "letsencrypt-prod-account-key"
@@ -80,7 +80,7 @@ resource "kubernetes_manifest" "letsencrypt_issuer" {
                 tsigAlgorithm = trimspace(var.cert_manager_rfc2136_algorithm)
                 tsigSecretSecretRef = {
                   name = kubernetes_secret_v1.rfc2136_tsig_secret.metadata[0].name
-                  key  = "tsig-secret-key"
+                  key = "tsig-secret-key"
                 }
               }
             }

@@ -2,11 +2,11 @@ terraform {
   required_version = ">= 1.15.0"
   required_providers {
     helm = {
-      source  = "hashicorp/helm"
+      source = "hashicorp/helm"
       version = "~> 3.2"
     }
     kubernetes = {
-      source  = "hashicorp/kubernetes"
+      source = "hashicorp/kubernetes"
       version = "~> 3.2"
     }
   }
@@ -64,34 +64,56 @@ resource "kubernetes_manifest" "basic_auth_middleware" {
   }
 }
 
-resource "kubernetes_manifest" "traefik_dashboard_ingress" {
-  manifest = {
-    apiVersion = "traefik.io/v1alpha1"
-    kind = "IngressRoute"
-    metadata = {
-      name = "traefik-dashboard"
-      namespace = "traefik"
-      annotations = {
-        "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-        "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-default-http-to-https@kubernetescrd,traefik-dashboard-auth@kubernetescrd"
-      }
+resource "kubernetes_ingress_v1" "traefik_dashboard_ingress" {
+  metadata {
+    name = "traefik-dashboard"
+    namespace = "traefik"
+    annotations = {
+      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+      "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-default-http-to-https@kubernetescrd,traefik-dashboard-auth@kubernetescrd"
     }
-    spec = {
-      tls = {
-        secretName = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
-      }
-      routes = [
-        {
-          match = "Host(`${trimspace(var.traefik_fqdn)}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
-          kind  = "Rule"
-          services = [
-            {
-              name = "api@internal"
-              kind = "TraefikService"
+  }
+
+  spec {
+    ingress_class_name = "traefik"
+
+    tls {
+      hosts = [trimspace(var.traefik_fqdn)]
+      secret_name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
+    }
+
+    rule {
+      host = trimspace(var.traefik_fqdn)
+
+      http {
+        path {
+          path = "/dashboard"
+          path_type = "Prefix"
+
+          backend {
+            service {
+              name = "traefik-dashboard"
+              port {
+                name = "traefik"
+              }
             }
-          ]
+          }
         }
-      ]
+
+        path {
+          path = "/api"
+          path_type = "Prefix"
+
+          backend {
+            service {
+              name = "traefik-dashboard"
+              port {
+                name = "traefik"
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

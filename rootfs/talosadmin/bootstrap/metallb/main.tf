@@ -2,11 +2,11 @@ terraform {
   required_version = ">= 1.15.0"
   required_providers {
     helm = {
-      source  = "hashicorp/helm"
+      source = "hashicorp/helm"
       version = "~> 3.2"
     }
     kubernetes = {
-      source  = "hashicorp/kubernetes"
+      source = "hashicorp/kubernetes"
       version = "~> 3.2"
     }
   }
@@ -35,7 +35,7 @@ resource "helm_release" "metallb" {
   name = "metallb"
   repository = "https://metallb.github.io/metallb"
   chart = "metallb"
-  namespace  = kubernetes_namespace_v1.metallb.metadata[0].name
+  namespace = kubernetes_namespace_v1.metallb.metadata[0].name
 
   wait = true
   wait_for_jobs = true
