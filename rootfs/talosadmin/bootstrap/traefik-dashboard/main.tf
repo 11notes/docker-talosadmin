@@ -64,55 +64,39 @@ resource "kubernetes_manifest" "basic_auth_middleware" {
   }
 }
 
-resource "kubernetes_ingress_v1" "traefik_dashboard_ingress" {
-  metadata {
-    name = "traefik-dashboard"
-    namespace = "traefik"
-    annotations = {
-      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-      "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-default-http-to-https@kubernetescrd,traefik-dashboard-auth@kubernetescrd"
+resource "kubernetes_manifest" "traefik_dashboard_ingress" {
+  manifest = {
+    apiVersion = "traefik.io/v1alpha1"
+    kind = "IngressRoute"
+    metadata = {
+      name = "traefik-dashboard"
+      namespace = "traefik"
+      annotations = {
+        "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
+      }
     }
-  }
-
-  spec {
-    ingress_class_name = "traefik"
-
-    tls {
-      hosts = [trimspace(var.traefik_fqdn)]
-      secret_name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
-    }
-
-    rule {
-      host = trimspace(var.traefik_fqdn)
-
-      http {
-        path {
-          path = "/dashboard"
-          path_type = "Prefix"
-
-          backend {
-            service {
-              name = "traefik-dashboard"
-              port {
-                name = "traefik"
-              }
+    spec = {
+      entryPoints = ["websecure"]
+      routes = [
+        {
+          match = "Host(`${trimspace(var.traefik_fqdn)}`) && (PathPrefix(`/dashboard`) || PathPrefix(`/api`))"
+          kind = "Rule"
+          services = [
+            {
+              name = "api@internal"
+              kind = "TraefikService"
             }
-          }
-        }
-
-        path {
-          path = "/api"
-          path_type = "Prefix"
-
-          backend {
-            service {
-              name = "traefik-dashboard"
-              port {
-                name = "traefik"
-              }
+          ]
+          middlewares = [
+            {
+              name = kubernetes_manifest.basic_auth_middleware.manifest.metadata.name
+              namespace = "traefik"
             }
-          }
+          ]
         }
+      ]
+      tls = {
+        secretName = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
       }
     }
   }
