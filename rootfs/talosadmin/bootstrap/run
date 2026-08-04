@@ -29,14 +29,14 @@
   terraform -chdir=./cert-manager-issuer init > /dev/null
   terraform -chdir=./cert-manager-issuer apply --auto-approve
 
-  echo "configure Cert-Manager wildcard certificate"
-  terraform -chdir=./cert-manager-wildcard init > /dev/null
-  terraform -chdir=./cert-manager-wildcard apply --auto-approve
-
   # Traefik stage
   echo "installing Traefik ..."
   terraform -chdir=./traefik init > /dev/null
   terraform -chdir=./traefik apply --auto-approve
+
+  echo "configure Cert-Manager wildcard certificate for Traefik"
+  terraform -chdir=./cert-manager-wildcard init > /dev/null
+  terraform -chdir=./cert-manager-wildcard apply --auto-approve
 
   echo "configure Traefik with authenticated dashboard"
   terraform -chdir=./traefik-dashboard init > /dev/null
