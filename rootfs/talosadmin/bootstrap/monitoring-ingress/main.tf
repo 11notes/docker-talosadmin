@@ -44,6 +44,7 @@ resource "kubernetes_ingress_v1" "monitoring_ingress" {
     ingress_class_name = "traefik"
 
     tls {
+      hosts = [trimspace(var.monitoring_fqdn)]
       secret_name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
     }
 

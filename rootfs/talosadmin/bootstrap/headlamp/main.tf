@@ -59,6 +59,7 @@ resource "kubernetes_ingress_v1" "headlamp_ingress" {
     ingress_class_name = "traefik"
 
     tls {
+      hosts = [trimspace(var.headlamp_fqdn)]
       secret_name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
     }
 
