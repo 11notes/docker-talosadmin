@@ -21,11 +21,11 @@ resource "kubernetes_manifest" "wildcard_cert" {
     apiVersion = "cert-manager.io/v1"
     kind = "Certificate"
     metadata = {
-      name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}"
+      name = trimspace(var.wildcard_fqdn)
       namespace = "traefik"
     }
     spec = {
-      secretName = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
+      secretName = trimspace(var.wildcard_fqdn)
       dnsNames = ["*.${var.wildcard_fqdn}", "${var.wildcard_fqdn}"]
       issuerRef = {
         name = "letsencrypt-prod"

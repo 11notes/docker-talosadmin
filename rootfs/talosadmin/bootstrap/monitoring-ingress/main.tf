@@ -45,7 +45,7 @@ resource "kubernetes_ingress_v1" "monitoring_ingress" {
 
     tls {
       hosts = [trimspace(var.monitoring_fqdn)]
-      secret_name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
+      secret_name = trimspace(var.wildcard_fqdn)
     }
 
     rule {

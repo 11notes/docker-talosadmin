@@ -79,7 +79,7 @@ resource "kubernetes_ingress_v1" "hubble_ingress" {
     ingress_class_name = "traefik"
 
     tls {
-      secret_name = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
+      secret_name = trimspace(var.wildcard_fqdn)
     }
 
     rule {

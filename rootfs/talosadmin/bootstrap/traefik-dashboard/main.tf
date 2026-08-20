@@ -96,7 +96,7 @@ resource "kubernetes_manifest" "traefik_dashboard_ingress" {
         }
       ]
       tls = {
-        secretName = "wildcard-${replace(trimspace(var.wildcard_fqdn), ".", "-")}-tls"
+        secretName = trimspace(var.wildcard_fqdn)
       }
     }
   }
