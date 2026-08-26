@@ -96,7 +96,10 @@
   RUN set -eux; \
     apk --update --no-cache add \
       nano \
-      coreutils;
+      coreutils; \
+    mkdir -p ${APP_ROOT}/.terraform.d/init; \
+    chown -R ${APP_UID}:${APP_GID} \
+      ${APP_ROOT};
 
 # :: EXECUTE
   WORKDIR /talosadmin
