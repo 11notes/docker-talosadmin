@@ -77,11 +77,21 @@ resource "helm_release" "traefik" {
     {
       name = "providers.kubernetesIngress.publishedService.pathOverride"
       value = "traefik/traefik"
+    },
+    {
+      name  = "providers.kubernetesIngress.allowExternalNameServices"
+      value = "true"
     }
   ]
 
   values = [
-    yamlencode({
+    yamlencode({  
+      env = [
+        {
+          name  = "GODEBUG"
+          value = "x509negativeserial=1"
+        }
+      ]
       metrics = {
         prometheus = {
           serviceMonitor = {
