@@ -128,6 +128,11 @@ resource "helm_release" "vsphere_csi" {
         }
       }
     }
+    controller = {
+      config = {
+        "block-volume-snapshot" = true
+      }
+    }
   })
 ]
 }
