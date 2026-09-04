@@ -88,6 +88,7 @@
     COPY --from=distroless-kompose / /
     COPY --from=distroless-terraform / /
     COPY --from=govc /distroless/ /
+    COPY --from=util / /
     COPY --from=file-system --chown=${APP_UID}:${APP_GID} /distroless/ /
     COPY --chown=${APP_UID}:${APP_GID} ./rootfs/ /
 
@@ -99,7 +100,8 @@
       coreutils; \
     mkdir -p ${APP_ROOT}/.terraform.d/init; \
     chown -R ${APP_UID}:${APP_GID} \
-      ${APP_ROOT};
+      ${APP_ROOT}; \
+    chmod +x -R /usr/local/bin;
 
 # :: EXECUTE
   WORKDIR /talosadmin

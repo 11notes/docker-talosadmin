@@ -1,0 +1,18 @@
+#!/bin/sh
+  FN=$(echo "${1}" | tr '[:upper:]' '[:lower:]')
+  shift
+
+  case "${FN}" in
+    "update")
+      cd ${HOME}
+      eleven git slice https://github.com/11notes/docker-talosadmin.git HEAD rootfs/talosadmin/bootstrap
+      cp -af ./docker-talosadmin/rootfs/talosadmin/bootstrap/. ./bootstrap
+      rm -rf ./docker-talosadmin
+      eleven log info "bootstrap updated to latest version from github"
+    ;;
+
+    *)
+      eleven log warning "function ${FN} does not exist"
+      exit 1
+    ;;
+  esac
