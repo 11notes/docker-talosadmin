@@ -41,57 +41,57 @@ resource "helm_release" "traefik" {
   chart = "traefik"
   namespace = "traefik"
 
-  set = [
-    {
-      name = "deployment.kind"
-      value = "DaemonSet"
-    },
-    {
-      name = "hostNetwork"
-      value = "true"
-    },
-    {
-      name = "updateStrategy.rollingUpdate.maxUnavailable"
-      value = "1"
-    },
-    {
-      name = "updateStrategy.rollingUpdate.maxSurge"
-      value = "0"
-    },
-    {
-      name = "deployment.dnsPolicy" 
-      value = "ClusterFirstWithHostNet"
-    },
-    {
-      name = "service.spec.externalTrafficPolicy"
-      value = "Local"
-    },
-    {
-      name = "service.spec.loadBalancerIP"
-      value = trimspace(var.traefik_ingress_ip)
-    },
-    {
-      name = "ingressRoute.dashboard.enabled"
-      value = "false"
-    },
-    {
-      name = "providers.kubernetesIngress.publishedService.pathOverride"
-      value = "traefik/traefik"
-    },
-    {
-      name  = "providers.kubernetesIngress.allowExternalNameServices"
-      value = "true"
-    }
-  ]
-
   values = [
-    yamlencode({  
+    yamlencode({
+      # daemonSet config
+      deployment = {
+        kind = "DaemonSet"
+        dnsPolicy = "ClusterFirstWithHostNet"
+      }
+
+      hostNetwork = true
+
+      updateStrategy = {
+        rollingUpdate = {
+          maxUnavailable = 1
+          maxSurge = 0
+        }
+      }
+
+      # expose via static metallb IP
+      service = {
+        spec = {
+          externalTrafficPolicy = "Local"
+          loadBalancerIP = trimspace(var.traefik_ingress_ip)
+        }
+      }
+
+      # disable insecure dashboard
+      ingressRoute = {
+        dashboard = {
+          enabled = false
+        }
+      }
+
+      # traefik namespace for k8s ingress as well as allowing external services
+      providers = {
+        kubernetesIngress = {
+          publishedService = {
+            pathOverride = "traefik/traefik"
+          }
+          allowExternalNameServices = true
+        }
+      }
+
+      # allow malformed SSL self-signed certificates from IIS
       env = [
         {
-          name  = "GODEBUG"
+          name = "GODEBUG"
           value = "x509negativeserial=1"
         }
       ]
+
+      # enable global prometheus
       metrics = {
         prometheus = {
           serviceMonitor = {
@@ -99,6 +99,54 @@ resource "helm_release" "traefik" {
           }
         }
       }
+
+
+      # better defaults, longer timeouts and more connections per node
+      ports = {
+        web = {
+          transport = {
+            respondingTimeouts = {
+              readTimeout = "0s"
+              writeTimeout = "0s"
+              idleTimeout = "180s"
+            }
+          }
+
+          http = {
+            redirections = {
+              entryPoint = {
+                to = "websecure"
+                scheme = "https"
+                permanent = true
+              }
+            }
+          }
+        }
+
+        websecure = {
+          asDefault = true
+          transport = {
+            respondingTimeouts = {
+              readTimeout = "0s"
+              writeTimeout = "0s"
+              idleTimeout = "180s"
+            }
+          }
+
+          http = {
+            middlewares = [
+              "traefik-default-security-headers@kubernetescrd"
+            ]
+            tls = {
+              options = "traefik-default-tls-profile@kubernetescrd"
+            }
+          }
+        }
+      }
+
+      additionalArguments = [
+        "--serversTransport.maxIdleConnsPerHost=256",
+      ]
     })
   ]
 }
