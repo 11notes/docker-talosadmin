@@ -49,10 +49,6 @@ resource "kubernetes_ingress_v1" "headlamp_ingress" {
   metadata {
     name = "headlamp-ingress"
     namespace = "kube-system"
-    annotations = {
-      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-      "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-default-http-to-https@kubernetescrd"
-    }
   }
 
   spec {

@@ -70,8 +70,7 @@ resource "kubernetes_ingress_v1" "hubble_ingress" {
     name = "hubble-ingress"
     namespace = "kube-system"
     annotations = {
-      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-      "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-default-http-to-https@kubernetescrd,traefik-hubble-dashboard-auth@kubernetescrd"
+      "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-hubble-dashboard-auth@kubernetescrd"
     }
   }
 

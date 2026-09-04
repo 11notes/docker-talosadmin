@@ -34,10 +34,6 @@ resource "kubernetes_ingress_v1" "monitoring_ingress" {
   metadata {
     name = "monitoring-ingress"
     namespace = "monitoring"
-    annotations = {
-      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-      "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-default-http-to-https@kubernetescrd"
-    }
   }
 
   spec {

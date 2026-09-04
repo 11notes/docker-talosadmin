@@ -56,7 +56,7 @@ resource "kubernetes_secret_v1" "k10_basic_auth" {
 
 resource "kubernetes_service_account_v1" "k10_service_account" {
   metadata {
-    name      = "k10-sa"
+    name = "k10-sa"
     namespace = kubernetes_namespace_v1.k10.metadata[0].name
   }
 }
@@ -67,36 +67,36 @@ resource "kubernetes_cluster_role_binding_v1" "k10_rbac_cluster" {
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind      = "ClusterRole"
-    name      = "k10-admin"
+    kind = "ClusterRole"
+    name = "k10-admin"
   }
   subject {
-    kind      = "ServiceAccount"
-    name      = kubernetes_service_account_v1.k10_service_account.metadata[0].name
+    kind = "ServiceAccount"
+    name = kubernetes_service_account_v1.k10_service_account.metadata[0].name
     namespace = kubernetes_namespace_v1.k10.metadata[0].name
   }
 }
 
 resource "kubernetes_role_binding_v1" "k10_rbac_ns" {
   metadata {
-    name      = "${kubernetes_service_account_v1.k10_service_account.metadata[0].name}-ns"
+    name = "${kubernetes_service_account_v1.k10_service_account.metadata[0].name}-ns"
     namespace = kubernetes_namespace_v1.k10.metadata[0].name
   }
   role_ref {
     api_group = "rbac.authorization.k8s.io"
-    kind      = "Role"
-    name      = "k10-ns-admin"
+    kind = "Role"
+    name = "k10-ns-admin"
   }
   subject {
-    kind      = "ServiceAccount"
-    name      = kubernetes_service_account_v1.k10_service_account.metadata[0].name
+    kind = "ServiceAccount"
+    name = kubernetes_service_account_v1.k10_service_account.metadata[0].name
     namespace = kubernetes_namespace_v1.k10.metadata[0].name
   }
 }
 
 resource "kubernetes_secret_v1" "k10_service_account_token" {
   metadata {
-    name      = "${kubernetes_service_account_v1.k10_service_account.metadata[0].name}-token"
+    name = "${kubernetes_service_account_v1.k10_service_account.metadata[0].name}-token"
     namespace = kubernetes_namespace_v1.k10.metadata[0].name
     annotations = {
       "kubernetes.io/service-account.name" = kubernetes_service_account_v1.k10_service_account.metadata[0].name
@@ -135,10 +135,6 @@ resource "kubernetes_ingress_v1" "k10_ingress" {
   metadata {
     name = "k10-ingress"
     namespace = kubernetes_namespace_v1.k10.metadata[0].name
-    annotations = {
-      "cert-manager.io/cluster-issuer" = "letsencrypt-prod"
-      "traefik.ingress.kubernetes.io/router.middlewares" = "traefik-default-http-to-https@kubernetescrd"
-    }
   }
 
   spec {
