@@ -1,7 +1,7 @@
 ![banner](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/banner/README.png)
 
 # TALOSADMIN
-![size](https://img.shields.io/badge/image_size-262MB-green?color=%2338ad2d)![5px](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/markdown/transparent5x2px.png)![pulls](https://img.shields.io/docker/pulls/11notes/talosadmin?color=2b75d6)![5px](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/markdown/transparent5x2px.png)[<img src="https://img.shields.io/github/issues/11notes/docker-talosadmin?color=7842f5">](https://github.com/11notes/docker-talosadmin/issues)![5px](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/markdown/transparent5x2px.png)![swiss_made](https://img.shields.io/badge/Swiss_Made-FFFFFF?labelColor=FF0000&logo=data:image/svg%2bxml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0idHJhbnNwYXJlbnQiLz4KICA8cGF0aCBkPSJtMTMgNmg2djdoN3Y2aC03djdoLTZ2LTdoLTd2LTZoN3oiIGZpbGw9IiNmZmYiLz4KPC9zdmc+)
+![size](https://img.shields.io/badge/image_size-270MB-green?color=%2338ad2d)![5px](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/markdown/transparent5x2px.png)![pulls](https://img.shields.io/docker/pulls/11notes/talosadmin?color=2b75d6)![5px](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/markdown/transparent5x2px.png)[<img src="https://img.shields.io/github/issues/11notes/docker-talosadmin?color=7842f5">](https://github.com/11notes/docker-talosadmin/issues)![5px](https://raw.githubusercontent.com/11notes/static/refs/heads/master/img/markdown/transparent5x2px.png)![swiss_made](https://img.shields.io/badge/Swiss_Made-FFFFFF?labelColor=FF0000&logo=data:image/svg%2bxml;base64,PHN2ZyB2ZXJzaW9uPSIxIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDMyIDMyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgogIDxyZWN0IHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgZmlsbD0idHJhbnNwYXJlbnQiLz4KICA8cGF0aCBkPSJtMTMgNmg2djdoN3Y2aC03djdoLTZ2LTdoLTd2LTZoN3oiIGZpbGw9IiNmZmYiLz4KPC9zdmc+)
 
 Container image to manage talos k8s clusters on vSphere
 
@@ -21,7 +21,7 @@ x-lockdown: &lockdown
 
 services:
   admin:
-    image: "11notes/talosadmin:1.0.4"
+    image: "11notes/talosadmin:1.0.6"
     <<: *lockdown
     environment:
       TZ: "Europe/Zurich"
@@ -69,25 +69,15 @@ To find out how you can change the default UID/GID of this container image, cons
 # MAIN TAGS 🏷️
 These are the main tags for the image. There is also a tag for each commit and its shorthand sha256 value.
 
-* [1.0.4](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.4)
+* [1.0.6](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.6)
 * [latest](https://hub.docker.com/r/11notes/talosadmin/tags?name=latest)
-* [1.0.4-unraid](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.4-unraid)
-* [latest-unraid](https://hub.docker.com/r/11notes/talosadmin/tags?name=latest-unraid)
-* [1.0.4-nobody](https://hub.docker.com/r/11notes/talosadmin/tags?name=1.0.4-nobody)
-* [latest-nobody](https://hub.docker.com/r/11notes/talosadmin/tags?name=latest-nobody)
 
 # REGISTRIES ☁️
 ```
-docker pull 11notes/talosadmin:1.0.4
-docker pull ghcr.io/11notes/talosadmin:1.0.4
-docker pull quay.io/11notes/talosadmin:1.0.4
+docker pull 11notes/talosadmin:1.0.6
+docker pull ghcr.io/11notes/talosadmin:1.0.6
+docker pull quay.io/11notes/talosadmin:1.0.6
 ```
-
-# UNRAID VERSION 🟠
-This image supports unraid by default. Simply add **-unraid** to any tag and the image will run as 99:100 instead of 1000:1000.
-
-# NOBODY VERSION 👻
-This image supports nobody by default. Simply add **-nobody** to any tag and the image will run as 65534:65534 instead of 1000:1000.
 
 # SOURCE 💾
 * [11notes/talosadmin](https://github.com/11notes/docker-talosadmin)
@@ -109,4 +99,4 @@ This image supports nobody by default. Simply add **-nobody** to any tag and the
 # ElevenNotes™️
 This image is provided to you at your own risk. Always make backups before updating an image to a different version. Check the [releases](https://github.com/11notes/docker-talosadmin/releases) for breaking changes. If you have any problems with using this image simply raise an [issue](https://github.com/11notes/docker-talosadmin/issues), thanks. If you have a question or inputs please create a new [discussion](https://github.com/11notes/docker-talosadmin/discussions) instead of an issue. You can find all my other repositories on [github](https://github.com/11notes?tab=repositories).
 
-*created 21.08.2026, 08:25:07 (CET)*
+*created 04.09.2026, 11:37:17 (CET)*
