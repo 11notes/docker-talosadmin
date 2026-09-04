@@ -22,23 +22,6 @@ provider "helm" {
   }
 }
 
-resource "kubernetes_manifest" "traefik_redirect_scheme_middleware" {
-  manifest = {
-    apiVersion = "traefik.io/v1alpha1"
-    kind = "Middleware"
-    metadata = {
-      name = "default-http-to-https"
-      namespace = "traefik"
-    }
-    spec = {
-      redirectScheme = {
-        scheme = "https"
-        permanent = true
-      }
-    }
-  }
-}
-
 resource "kubernetes_manifest" "traefik_security_headers" {
   manifest = {
     apiVersion = "traefik.io/v1alpha1"
@@ -53,11 +36,8 @@ resource "kubernetes_manifest" "traefik_security_headers" {
         stsIncludeSubdomains = true
         stsPreload = true
         forceSTSHeader = true
-
-        browserXssFilter = true
         contentTypeNosniff = true
-        frameDeny = true
-        referrerPolicy = "same-origin"
+        referrerPolicy = "strict-origin-when-cross-origin"
       }
     }
   }
@@ -73,6 +53,8 @@ resource "kubernetes_manifest" "traefik_tls_options" {
     }
     spec = {
       minVersion = "VersionTLS12"
+      preferServerCipherSuites = true
+      sniStrict = true
 
       cipherSuites = [
         "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
@@ -82,8 +64,6 @@ resource "kubernetes_manifest" "traefik_tls_options" {
         "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
         "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256"
       ]
-
-      preferServerCipherSuites = true
     }
   }
 }
