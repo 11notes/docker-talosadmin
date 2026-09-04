@@ -16,5 +16,7 @@
       "govc": "https://github.com/vmware/govmomi",
       "kubectl": "https://github.com/kubernetes/kubernetes"
     }
-  }
+  },
+  "unraid": true,
+  "nobody": true
 }
