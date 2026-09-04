@@ -88,6 +88,7 @@ resource "helm_release" "kube_prometheus_stack" {
           serviceMonitorSelectorNilUsesHelmValues = false
           podMonitorSelectorNilUsesHelmValues = false
           ruleSelectorNilUsesHelmValues = false
+          serviceMonitorNamespaceSelector = {}
         }
       }
 
