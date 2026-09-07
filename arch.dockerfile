@@ -74,6 +74,7 @@
     ENV GOVC_INSECURE="true" \
         GIT_TEMPLATE_DIR=/opt/git/templates \
         GIT_EXEC_PATH=/opt/git \
+        GIT_CONFIG_NOSYSTEM=true \
         TF_PLUGIN_CACHE_DIR="${APP_ROOT}/.terraform.d/init"
 
   # :: multi-stage
