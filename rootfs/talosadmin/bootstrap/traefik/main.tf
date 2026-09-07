@@ -94,12 +94,15 @@ resource "helm_release" "traefik" {
       # enable global prometheus
       metrics = {
         prometheus = {
+          addEntryPointsLabels = true,
+          addRoutersLabels = true,
+          addServicesLabels = true
+          buckets = [0.1, 0.3, 1.2, 5.0],
           serviceMonitor = {
             enabled = true
           }
         }
       }
-
 
       # better defaults, longer timeouts and more connections per node
       ports = {
