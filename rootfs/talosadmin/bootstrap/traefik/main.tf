@@ -94,10 +94,10 @@ resource "helm_release" "traefik" {
       # enable global prometheus
       metrics = {
         prometheus = {
-          addEntryPointsLabels = true,
-          addRoutersLabels = true,
+          addEntryPointsLabels = true
+          addRoutersLabels = true
           addServicesLabels = true
-          buckets = [0.1, 0.3, 1.2, 5.0],
+          buckets = "0.1,0.3,1.2,5.0"
           serviceMonitor = {
             enabled = true
           }
@@ -150,6 +150,31 @@ resource "helm_release" "traefik" {
       additionalArguments = [
         "--serversTransport.maxIdleConnsPerHost=256",
       ]
+
+      accessLog = {
+        enabled = true
+        format = "json"
+        filters = {
+          statusCodes = "400-599"
+          retryAttempts = true
+          minDuration = "1s"
+        }
+        fields = {
+          defaultMode = "keep"
+          headers = {
+            defaultMode = "drop"
+            names = {
+              "User-Agent" = "keep"
+              "X-Forwarded-For" = "keep"
+            }
+          }
+        }
+      }
+
+      log = {
+        level = "INFO"
+        format = "json"
+      }
     })
   ]
 }

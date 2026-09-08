@@ -67,6 +67,10 @@ resource "helm_release" "kube_prometheus_stack" {
   namespace = "monitoring"
   create_namespace = false
 
+  wait = true
+  wait_for_jobs = true
+  timeout = 600
+
   values = [
     yamlencode({
       prometheus = {
@@ -128,6 +132,13 @@ resource "helm_release" "kube_prometheus_stack" {
           size = var.grafana_storage_size
         }
         adminPassword = var.grafana_admin_password
+        additionalDataSources = [{
+          name = "Loki"
+          type = "loki"
+          url = "http://loki-gateway.monitoring.svc.cluster.local"
+          access = "proxy"
+          isDefault = false
+        }]
       }
 
       "prometheus-node-exporter" = {
