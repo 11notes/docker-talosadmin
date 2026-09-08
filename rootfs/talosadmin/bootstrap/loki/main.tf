@@ -123,7 +123,7 @@ resource "helm_release" "alloy" {
             }
             rule {
               source_labels = ["__meta_kubernetes_pod_container_name"]
-              target_label  = "app"
+              target_label = "app"
             }
             rule {
               source_labels = ["__meta_kubernetes_pod_uid"]
