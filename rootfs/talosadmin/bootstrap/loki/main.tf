@@ -22,6 +22,10 @@ provider "helm" {
   }
 }
 
+variable "traefik_excluded_fqdns" {
+  type = list(string)
+}
+
 resource "helm_release" "loki" {
   name = "loki"
   repository = "https://grafana.github.io/helm-charts"
@@ -141,6 +145,16 @@ resource "helm_release" "alloy" {
           }
           loki.process "pod_logs" {
             stage.cri {}
+            stage.json {
+              expressions = {
+                request_host = "RequestHost"
+              }
+            }
+
+            stage.drop {
+              source = "request_host"
+              expression = "^(${join("|", [for h in var.traefik_excluded_fqdns : replace(h, ".", "\\.")])})$"
+            }
             forward_to = [loki.write.default.receiver]
           }
           loki.write "default" {
