@@ -93,6 +93,7 @@ resource "helm_release" "kube_prometheus_stack" {
           podMonitorSelectorNilUsesHelmValues = false
           ruleSelectorNilUsesHelmValues = false
           serviceMonitorNamespaceSelector = {}
+          enableRemoteWriteReceiver = true
         }
       }
 
