@@ -147,13 +147,13 @@ resource "helm_release" "alloy" {
             stage.cri {}
             stage.json {
               expressions = {
-                request_host = "RequestHost"
+                request_host = "RequestHost",
               }
             }
 
             stage.drop {
               source = "request_host"
-              expression = "^(${join("|", [for h in var.traefik_excluded_fqdns : replace(h, ".", "\\.")])})$"
+              expression = `^(${join("|", [for h in var.traefik_excluded_fqdns: replace(h, ".", "\\.")])})$`
             }
             forward_to = [loki.write.default.receiver]
           }
